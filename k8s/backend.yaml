@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: back-app
 spec:
-  replicas: 2 
+  replicas: 1 
   selector:
     matchLabels:
       app: back-app
@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
       - name: back-app
-        image: kunjolee/w2-backend:1.0.0
+        # image: kunjolee/w2-backend:1.0.0
+        image: kunjolee/w2-backend-amd:1.0.0
         env: 
         - name: DB_PASSWORD
           valueFrom: 
