@@ -1,0 +1,176 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg-pv-claim
+  labels: 
+    app: pg-db
+spec:
+  resources:
+    requests:
+      storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+# Este archivo configMap es utilizado para pdoer configurar variables de entorno, configuraciones iniciales y archivos
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pg-cm
+data:
+  #Definir el nombre del archivo con su extension y escribir "|" y luego el contenido de mi archivo 
+  init.sql: |
+    CREATE TABLE currencies(
+      "id" SERIAL PRIMARY KEY,
+      "currencyType" VARCHAR(255) NOT NULL,
+      "value" FLOAT NOT NULL,
+      "createdAt" TIMESTAMP NOT NULL,
+      "updatedAt" TIMESTAMP NOT NULL
+    );
+    INSERT INTO currencies ("currencyType", value, "createdAt", "updatedAt") values (
+        'quetzal',
+        1,
+        now(),
+        now()
+    );
+    INSERT INTO currencies ("currencyType", value, "createdAt", "updatedAt") values (
+        'dollar',
+        7.88,
+        now(),
+        now()
+    );
+    INSERT INTO currencies ("currencyType", value, "createdAt", "updatedAt") values (
+        'euro',
+        8.73,
+        now(),
+        now()
+    );
+
+    CREATE TABLE categories(
+        "id" SERIAL PRIMARY KEY,
+        "category" VARCHAR(255) NOT NULL,
+        "state" INT NOT NULL,
+        "createdAt" TIMESTAMP NOT NULL,
+        "updatedAt" TIMESTAMP NOT NULL
+    );
+
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'variety',
+        1,
+        now(),
+        now()
+    );
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'food',
+        1,
+        now(),
+        now()
+    );
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'health',
+        1,
+        now(),
+        now()
+    );
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'salary',
+        1,
+        now(),
+        now()
+    );
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'car',
+        1,
+        now(),
+        now()
+    );
+
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'games',
+        1,
+        now(),
+        now()
+    );
+
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'hang out',
+        1,
+        now(),
+        now()
+    );
+
+    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
+        'transfers',
+        1,
+        now(),
+        now()
+    ); 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-db
+spec:
+  selector: 
+    matchLabels:
+      app: pg-db
+  template:
+    metadata:
+      labels:
+        app: pg-db
+    spec:
+      volumes: 
+      - name: pg-persistent-storage
+        persistentVolumeClaim:
+          claimName: pg-pv-claim
+      - name: pg-cm-storage
+        configMap:
+          name: pg-cm
+      containers:
+      - name: pg-db
+        image: postgres:14.6
+        env: 
+          - name: POSTGRES_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: pg-secrets
+                key: password
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: pg-secrets
+                key: user
+          - name: PGDATA
+            value: "/var/lib/postgresql/data/pgdata"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "512m"
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: pg-persistent-storage
+          mountPath: /var/lib/postgresql/data
+        - name: pg-cm-storage
+          mountPath: /docker-entrypoint-initdb.d
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-service
+spec:
+  type: LoadBalancer
+  selector: 
+    app: pg-db
+  ports:
+  - port: 5432
+    targetPort: 5432
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pg-secrets
+type: Opaque
+data:
+  password: bXlzZWNyZXRwYXNzd29yZA==
+  user: a3ViZXJuZXRlcy1kYg==

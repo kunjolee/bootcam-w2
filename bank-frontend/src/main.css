@@ -1,0 +1,13 @@
+:root {
+    --main-color: #c7102e;
+    --second-color: '#fff';
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+}

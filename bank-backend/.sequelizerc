@@ -1,0 +1,5 @@
+export default {
+    // migrations tinene que tener su propia conexion. independientemente de la conexion de la aplicacion
+    'config': './db/config.ts',
+    'models-path': './models'
+}

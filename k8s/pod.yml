@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod-app 
+  labels:
+    name: label-app
+spec:
+  containers:
+  - name: container1
+    image: docker.io/nginx:1.23
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "128m" # 1000 is equivalent to 1 cpu
+    ports:
+      - containerPort: 80
+
+# Un pod puede tener varios contenedores, pero por lo general solo tenemos 1 contenedor en cada pod
+# Cuando nos referimos a un pod por lo general nos referimos a su contenedor
