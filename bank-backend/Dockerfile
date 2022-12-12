@@ -1,5 +1,6 @@
 # BUILD
 # docker build -t backend:1.0.0 .
+# docker build -t backend-amd:1.0.2-gcp --platform linux/amd64 .
 # RUN
 # docker run -d -p 8001:8001 backend:1.0.0
 

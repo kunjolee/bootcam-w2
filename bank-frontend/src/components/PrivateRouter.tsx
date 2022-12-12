@@ -19,16 +19,24 @@ const PrivateRouter = ( ) => {
 
   useEffect(() => {
     const fetchData = async () => {
+
+      let token = localStorage.getItem('token') 
+
       try {
-        const { data } = await api.get<IAuth>('/auth/verify');
+        console.log('que obtienes en el token', token)
+        const { data } = await api.post<IAuth>('/auth/verify', { 
+          token: token ? token : null
+        });
 
-        Cookies.set('token', data.token); 
+        // Cookies.set('token', data.token); 
 
+        localStorage.setItem('token', data.token)
         dispatch( setLogin( data ));
-
+        
       } catch (error) {
-          navigate('/login');
-          Cookies.remove('token');
+        navigate('/login');
+        localStorage.removeItem('token')
+          // Cookies.remove('token');
           console.log('Error checking the user authentication', error);
       }
     }

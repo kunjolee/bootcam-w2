@@ -15,7 +15,7 @@ spec:
       containers:
       - name: back-app
         # image: kunjolee/w2-backend:1.0.0
-        image: kunjolee/w2-backend-amd:1.0.0
+        image: kunjolee/w2-backend-amd:1.0.5
         env: 
         - name: DB_PASSWORD
           valueFrom: 

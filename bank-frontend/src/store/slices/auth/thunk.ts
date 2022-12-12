@@ -8,6 +8,7 @@ import { api } from '../../../api/axios';
 import { setCreateUser, setLogin, setLogout } from './authSlice';
 import { setError } from '../error';
 import { IAuth } from '../../../interfaces';
+import axios from 'axios';
 
 interface Props {
     form: LoginForm,
@@ -21,19 +22,21 @@ export const authLogin = ({ form, navigate, showMessage }: Props): AppThunk => {
 
         try {            
             const { data } = await api.post<IAuth>('/auth', form); 
-
             dispatch(setError({ isError: false, message: '' }));
             
             dispatch(setLogin( data ));
             
-            Cookies.set('token', data.token);
+            // Cookies.set('token', data.token);
+
+            localStorage.setItem('token', data.token)
 
             showMessage(data.msg, 'success');
             navigate('/');
 
             
         } catch (error: any) {
-            Cookies.remove('token')
+            // Cookies.remove('token')
+            localStorage.removeItem('token')
             
             if (error.message === 'Network Error') {
 
@@ -75,12 +78,14 @@ export const createUserThunk = ({ showMessage, navigate, form }: Props):AppThunk
             const { data } = await api.post<IAuth>('/users', form)
             dispatch(setCreateUser( data ));
 
-            Cookies.set('token', data.token);
+            // Cookies.set('token', data.token);
+            localStorage.setItem('token', data.token)
             showMessage(data.msg, 'success');
             navigate('/')
 
         } catch (error: any) {
-            Cookies.remove('token')
+            // Cookies.remove('token')
+            localStorage.removeItem('token')
             console.log(error);
             console.log('Something went wront, contact your admin', error);    
             

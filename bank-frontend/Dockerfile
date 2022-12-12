@@ -1,13 +1,13 @@
 # BUILD
 # docker build -t frontend:1.0.0-alpine .
-# docker build -t <nombreImage> --platform linux/amd64 .
+# docker build -t frontend:1.0.6-gcp --platform linux/amd64 .
 # RUN
 # docker run -d -p 4173:80 frontend:1.0.0-alpine
 # This is the first stage of my Dockerfile
 
 FROM node:16-alpine as build 
 
-ENV VITE_API_URL=34.27.210.205:8001
+ENV VITE_API_URL=http://35.192.203.234:8001
 
 COPY . /app
 
