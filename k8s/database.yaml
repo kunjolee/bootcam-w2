@@ -12,100 +12,7 @@ spec:
   accessModes:
     - ReadWriteOnce
 ---
-# Este archivo configMap es utilizado para pdoer configurar variables de entorno, configuraciones iniciales y archivos
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: pg-cm
-data:
-  #Definir el nombre del archivo con su extension y escribir "|" y luego el contenido de mi archivo 
-  init.sql: |
-    CREATE TABLE currencies(
-      "id" SERIAL PRIMARY KEY,
-      "currencyType" VARCHAR(255) NOT NULL,
-      "value" FLOAT NOT NULL,
-      "createdAt" TIMESTAMP NOT NULL,
-      "updatedAt" TIMESTAMP NOT NULL
-    );
-    INSERT INTO currencies ("currencyType", value, "createdAt", "updatedAt") values (
-        'quetzal',
-        1,
-        now(),
-        now()
-    );
-    INSERT INTO currencies ("currencyType", value, "createdAt", "updatedAt") values (
-        'dollar',
-        7.88,
-        now(),
-        now()
-    );
-    INSERT INTO currencies ("currencyType", value, "createdAt", "updatedAt") values (
-        'euro',
-        8.73,
-        now(),
-        now()
-    );
 
-    CREATE TABLE categories(
-        "id" SERIAL PRIMARY KEY,
-        "category" VARCHAR(255) NOT NULL,
-        "state" INT NOT NULL,
-        "createdAt" TIMESTAMP NOT NULL,
-        "updatedAt" TIMESTAMP NOT NULL
-    );
-
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'variety',
-        1,
-        now(),
-        now()
-    );
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'food',
-        1,
-        now(),
-        now()
-    );
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'health',
-        1,
-        now(),
-        now()
-    );
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'salary',
-        1,
-        now(),
-        now()
-    );
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'car',
-        1,
-        now(),
-        now()
-    );
-
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'games',
-        1,
-        now(),
-        now()
-    );
-
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'hang out',
-        1,
-        now(),
-        now()
-    );
-
-    INSERT INTO categories ("category", state, "createdAt", "updatedAt") values (
-        'transfers',
-        1,
-        now(),
-        now()
-    ); 
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -125,7 +32,7 @@ spec:
           claimName: pg-pv-claim
       - name: pg-cm-storage
         configMap:
-          name: pg-cm
+          name: pg-configmap
       containers:
       - name: pg-db
         image: postgres:14.6
@@ -133,12 +40,12 @@ spec:
           - name: POSTGRES_PASSWORD
             valueFrom: 
               secretKeyRef:
-                name: pg-secrets
+                name: pg-secrets-ag
                 key: password
           - name: POSTGRES_USER
             valueFrom:
               secretKeyRef:
-                name: pg-secrets
+                name: pg-secrets-ag
                 key: user
           - name: PGDATA
             value: "/var/lib/postgresql/data/pgdata"
@@ -165,12 +72,3 @@ spec:
   ports:
   - port: 5432
     targetPort: 5432
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: pg-secrets
-type: Opaque
-data:
-  password: bXlzZWNyZXRwYXNzd29yZA==
-  user: a3ViZXJuZXRlcy1kYg==

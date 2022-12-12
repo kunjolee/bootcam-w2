@@ -4,3 +4,13 @@ resources:
   - backend.yaml
   - frontend.yaml
   - namespace.yaml
+
+configMapGenerator:
+- name: pg-configmap
+  files: 
+  - inital_db.sql
+
+secretGenerator:
+- name: pg-secrets-ag
+  envs:
+  - .env

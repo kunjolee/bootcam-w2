@@ -15,7 +15,7 @@ spec:
       containers:
       - name: frontend-app
         # image: kunjolee/w2-frontend:1.0.0-alpine
-        image: kunjolee/w2-frontend-amd:1.0.0
+        image: kunjolee/w2-frontend-amd:1.0.4-gcp
         resources:
           limits:
             memory: "256Mi"

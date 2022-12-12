@@ -20,7 +20,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom: 
             secretKeyRef:
-              name: pg-secrets
+              name: pg-secrets-ag
               key: password
         - name: HOST
           value: pg-service
