@@ -8,6 +8,7 @@ export const validateJWT = async ( req: Request, res: Response, next: NextFuncti
 
     const { token } = req.cookies as { token: string };
 
+    console.log('vamos a ver que tiense en el token aca en validate', token)
     try {
 
         const uid = await verifyJWT( token );

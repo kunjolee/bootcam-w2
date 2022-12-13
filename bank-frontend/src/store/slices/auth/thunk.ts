@@ -25,18 +25,14 @@ export const authLogin = ({ form, navigate, showMessage }: Props): AppThunk => {
             dispatch(setError({ isError: false, message: '' }));
             
             dispatch(setLogin( data ));
-            
-            // Cookies.set('token', data.token);
 
-            localStorage.setItem('token', data.token)
-
+            Cookies.set('token', data.token, { secure: false });
             showMessage(data.msg, 'success');
             navigate('/');
 
             
         } catch (error: any) {
-            // Cookies.remove('token')
-            localStorage.removeItem('token')
+            Cookies.remove('token')
             
             if (error.message === 'Network Error') {
 
@@ -78,14 +74,12 @@ export const createUserThunk = ({ showMessage, navigate, form }: Props):AppThunk
             const { data } = await api.post<IAuth>('/users', form)
             dispatch(setCreateUser( data ));
 
-            // Cookies.set('token', data.token);
-            localStorage.setItem('token', data.token)
+            Cookies.set('token', data.token);
             showMessage(data.msg, 'success');
             navigate('/')
 
         } catch (error: any) {
-            // Cookies.remove('token')
-            localStorage.removeItem('token')
+            Cookies.remove('token')
             console.log(error);
             console.log('Something went wront, contact your admin', error);    
             

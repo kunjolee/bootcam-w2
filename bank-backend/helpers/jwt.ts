@@ -40,10 +40,7 @@ export const verifyJWT = ( token: string ): Promise<string> => {
         try {
             jwt.verify( token, process.env.JWT_PRIVATE_KEY || '', (err,payload) => {
                 if (err) {
-                    console.log('que viene en el token de la funcion', token)
-                    console.log('vamos a ver variables de etorno', process.env.JWT_PRIVATE_KEY)
-                    console.log('solo para ver ', JWT_PRIVATE_KEY)
-                    console.log('aca vamos a ver que pasa', err)
+                    console.log('token err', err)
                     reject('invalid token');
                 } else {
                     const { uid } = payload as { uid: string };

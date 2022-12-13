@@ -26,7 +26,7 @@ const Accounts = () => {
     try {
       await api.post('/accounts', {
         ...form,
-        idCurrency: 2
+        idCurrency: 1
       });
     
       showMessage('Account created successfully!', 'success')

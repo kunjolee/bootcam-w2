@@ -27,8 +27,7 @@ const Sidebar = () => {
 
     dispatch(setOpenMenu(false));
 
-    // Cookies.remove('token');
-    localStorage.removeItem('token')
+    Cookies.remove('token');
   }
 
   return (

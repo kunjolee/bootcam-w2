@@ -58,8 +58,7 @@ export const login = async (req: CustomRequest<IAuth>, res: Response) => {
 // verify if the user is already logged in
 export const verifyAuth = async (req: CustomRequest, res: Response) => {
 
-    // const { token } = req.cookies as { token: string };
-    const { token } = req.body as { token: string };
+    const { token } = req.cookies as { token: string };
     
     console.log('que obtienes en el token de las cookies', token)
 

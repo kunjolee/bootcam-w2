@@ -37,14 +37,12 @@ const CreateUser = () => {
       
       dispatch(setLogin( data ));
       showMessage('User saved successfully', 'success');
-      // Cookies.set('token', data.token);
-      localStorage.setItem('token', data.token)
+      Cookies.set('token', data.token, { secure: false });
       
       navigate('/');
       
     } catch (error: any) {
-      localStorage.removeItem('token')
-      // Cookies.remove('token');
+      Cookies.remove('token');
       
       console.log('Create User error. Try later', error);
       error.response.data.forEach((el:any)=>{

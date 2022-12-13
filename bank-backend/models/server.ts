@@ -55,7 +55,7 @@ class Server {
             credentials: true, origin: [
                 'http://localhost:5173',
                 'http://localhost:4173',
-                'http://34.27.210.205:4173'
+                'http://34.170.159.117:4173'
             ]
         }));
         // this.app.use(cors());
